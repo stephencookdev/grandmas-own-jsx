@@ -1,6 +1,6 @@
 const emojiRegex = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+/;
 
-export default function ({ types: t }) {
+module.exports = function ({ types: t }) {
   const stringOrIdentifier = (val) => {
     return /^['"`].*['"`]$/.test(val)
       ? t.stringLiteral(val.replace(/^['"`]/, "").replace(/['"`]$/, ""))
@@ -12,8 +12,11 @@ export default function ({ types: t }) {
     const type = refParts[0];
     const args = refParts.slice(1);
 
-    if (type === "_" && args.length === 1 && !/=/.test(args[0])) {
-      return { type: "_", value: stringOrIdentifier(args[0]) };
+    if (type === "_") {
+      const possibleLeaf = args.join(" ");
+      if (!/=/.test(possibleLeaf)) {
+        return { type: "_", value: stringOrIdentifier(possibleLeaf) };
+      }
     }
 
     const parsedArgs = args.map((arg) => {
@@ -121,10 +124,10 @@ export default function ({ types: t }) {
 
   const GrandmaVisitorInitiator = {
     Program(path) {
-      const commentLineTokens = path.parent.tokens.filter(
+      const commentLineTokens = path.parent.comments.filter(
         (token) => token.type === "CommentLine"
       );
-      const commentBlockTokens = path.parent.tokens.filter(
+      const commentBlockTokens = path.parent.comments.filter(
         (token) => token.type === "CommentBlock"
       );
 
@@ -158,5 +161,5 @@ export default function ({ types: t }) {
     },
   };
 
-  return GrandmaVisitorInitiator;
-}
+  return { visitor: GrandmaVisitorInitiator };
+};
