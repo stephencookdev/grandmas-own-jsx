@@ -40,13 +40,8 @@ module.exports = function ({ types: t }) {
         /^[A-Z]/.test(node.type[0])
           ? t.identifier(node.type)
           : t.stringLiteral(node.type),
-        t.objectExpression([
-          ...node.args,
-          t.objectProperty(
-            t.stringLiteral("children"),
-            t.arrayExpression(node.children.map(genTypeExpression))
-          ),
-        ]),
+        t.objectExpression(node.args),
+        ...node.children.map(genTypeExpression),
       ]
     );
   };
