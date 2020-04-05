@@ -1,12 +1,12 @@
 {
   "name": "grandmas-own-jsx",
-  "version": "0.0.4",
-  "description": "😱 JSX! 🥳 Grandmas. 💪",
+  "version": "1.0.0",
+  "description": "A custom JSX transpiler that uses 👵 because reasons.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": {
+    "name": "Stephen Cook",
+    "email": "stephen@stephencookdev.co.uk"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {}
 }
