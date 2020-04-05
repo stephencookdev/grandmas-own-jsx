@@ -1,7 +1,7 @@
 {
-  "name": "jsx-emoji",
-  "version": "1.0.0",
-  "description": "😱 JSX! 🥳 Emoji. 💪",
+  "name": "grandmas-own-jsx",
+  "version": "0.0.1",
+  "description": "😱 JSX! 🥳 Grandmas. 💪",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
