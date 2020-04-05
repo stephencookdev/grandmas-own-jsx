@@ -88,6 +88,13 @@ module.exports = function ({ types: t }) {
     return lineToComments;
   };
 
+  const uniqChildrenRef = (node) => {
+    // the node is the same for all references, but we don't want to modify the
+    // children, since the node could be used in multiple renders
+    node.children = [];
+    return node;
+  };
+
   const cookRecipe = (recipe, grandmasReference) => {
     const trimmedRecipe = recipe.replace(/^\n*/, "").replace(/\s*$/, "");
     const recipeByLine = trimmedRecipe.split("\n");
@@ -97,7 +104,7 @@ module.exports = function ({ types: t }) {
       line.replace(initialIndentMatcher, "")
     );
 
-    const rootNode = grandmasReference[normalRecipeByLine[0]];
+    const rootNode = uniqChildrenRef(grandmasReference[normalRecipeByLine[0]]);
     const nodeFocusStack = [{ indent: 0, node: rootNode }];
     for (let i = 1; i < normalRecipeByLine.length; i++) {
       const recipeLine = normalRecipeByLine[i];
@@ -107,7 +114,7 @@ module.exports = function ({ types: t }) {
         throw new Error("Invalid indentation. Grandma would be upset.");
       }
 
-      const currentNode = grandmasReference[recipeLine.trim()];
+      const currentNode = uniqChildrenRef(grandmasReference[recipeLine.trim()]);
       // we only want to assign to a parent, so keep going until we get one
       while (currentIndent.length <= nodeFocusStack[0].indent) {
         nodeFocusStack.shift();
@@ -155,7 +162,6 @@ module.exports = function ({ types: t }) {
           const typeExpression = genTypeExpression(domStruc);
 
           path.replaceWith(typeExpression);
-          // console.log(JSON.stringify(domStruc, null, 2));
         }
       }
     },
